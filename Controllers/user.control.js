@@ -11,13 +11,14 @@ const TestVideo = (req, res) => {
   if (!range) {
     res.status(400).send("Requires Range header");
   }
-  const V_Path = "././Videos/madi_chaala_intro.mp4";
+  const V_Path = "././Videos/Motu_Patlu.mp4";
   const V_Size = fs.statSync(V_Path).size;
   console.log("size :", V_Size);
   const CHUNK_SIZE = 10**6; // 1MB
   const start_num = Number(range.replace(/\D/g, ""));
   const end_num = Math.min(start_num + CHUNK_SIZE , V_Size - 1);
   const content_length = start_num - end_num + 1;
+  console.log(start_num , end_num, content_length);
   const headers = {
     "Content-Range": `bytes ${start_num} - ${end_num} / ${V_Size}`,
     "Accept-Ranges": "bytes",
@@ -27,6 +28,10 @@ const TestVideo = (req, res) => {
   res.writeHead(206, headers);
   const videoStream = fs.createReadStream(V_Path, {start_num, end_num});
   videoStream.pipe(res);
+};
+
+const UploadVideo = async (req, res) => {
+  res.status(200).sendFile(`${__dirname}/././upload.html`);
 };
 
 const AddUser = async (req, res) => {
@@ -41,4 +46,4 @@ const AddUser = async (req, res) => {
     });
 };
 
-module.exports = { getAllVideo, AddUser, TestVideo };
+module.exports = { getAllVideo, AddUser, TestVideo, UploadVideo };
