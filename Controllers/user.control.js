@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const getAllVideo = async (req, res) => {
   // res.status(200).send("hello users");
-  res.status(200).json({ msg: "hello users" });
+   await res.status(200).json({ msg: "hello users" });
 };
 
 const TestVideo = (req, res) => {
@@ -35,9 +35,8 @@ const UploadVideo = async (req, res) => {
 };
 
 const AddUser = async (req, res) => {
-  const user = new User(req.body);
-  user
-    .save()
+  const user =  new User(req.body);
+  await user.save()
     .then(() => {
       res.status(201).send(user);
     })
@@ -46,4 +45,13 @@ const AddUser = async (req, res) => {
     });
 };
 
-module.exports = { getAllVideo, AddUser, TestVideo, UploadVideo };
+const AllUsers = async (req, res) => {
+  const AllUser = await User.find();
+  
+  res.status(200).send(AllUser);
+
+  // res.status(400).send(error);
+   
+};
+
+module.exports = { getAllVideo, AddUser, AllUsers, TestVideo, UploadVideo };
